@@ -21,5 +21,9 @@ void loop () {
   AccX = (Wire.read() << 8 | Wire.read()) / 16384.0;
   AccY = (Wire.read() << 8 | Wire.read()) / 16384.0;
   AccZ = (Wire.read() << 8 | Wire.read()) / 16384.0;
-  Serial.print(AccX + " | " + AccY + " | " + AccZ);
+  Serial.print(AccX);
+  Serial.print(" | ");
+  Serial.print(AccY);
+  Serial.print(" | ");
+  Serial.println(AccZ);
 }
