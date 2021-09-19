@@ -5,7 +5,7 @@ float AccX, AccY, AccZ;
 float roll, pitch, yaw;
 
 void setup () {
-  Serial.begin(9600);
+  Serial.begin(57600);
   Wire.begin();
   Wire.beginTransmission(MPU);
   Wire.write(0x6B);
