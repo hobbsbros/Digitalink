@@ -17,7 +17,7 @@ const float time_delay = 100;
 const float alpha = (time_delay/(time_delay + (1/sampling_frequency)));
 
 // For integrating gyroscope data
-float start_time, elapsed_time, current_time;
+float start_time, delta_time, current_time;
 
 int c = 0;
 
@@ -61,25 +61,28 @@ void loop () {
   GyrY = (Wire.read() << 8 | Wire.read()) / 131.0;
   GyrZ = (Wire.read() << 8 | Wire.read()) / 131.0;
 
-  GyrX += GyroErrorX;
+  GyrX += GyroErrorX + 1.0*delta_time;
   GyrY += GyroErrorY;
-  GyrZ += GyroErrorZ;
+  //GyrZ += GyroErrorZ;
+  GyrZ += 1.1;
 
   // Calculate current loop time
   current_time = millis();
-  elapsed_time = (current_time - start_time);
+  delta_time = (current_time - start_time);
 
-  GyrPosX += GyrX*elapsed_time;
-  GyrPosY += GyrY*elapsed_time;
-  PosZ += GyrZ*elapsed_time;
+  GyrPosX += GyrX*delta_time;
+  GyrPosY += GyrY*delta_time;
 
   // Use a complementary filter to combine the data
   PosX = (1 - alpha)*GyrPosX + alpha*AccPosX;
   PosY = (1 - alpha)*GyrPosY + alpha*AccPosY;
+  PosZ += GyrZ*delta_time;
   
   Serial.print(PosX);
   Serial.print(",");
-  Serial.print(PosY);
+  Serial.println(PosY);
+  //Serial.print(",");
+  //Serial.println(PosZ);
 }
 
 void calculate_error_values () {
